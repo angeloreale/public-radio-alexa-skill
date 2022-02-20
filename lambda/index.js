@@ -11,7 +11,10 @@ const PUBLIC_STATUS = [
 const STATION_NAME = "YOUR_RADIO";
 const CHANNELS = ["Channel One", "Channel Two"];
 const WEBSITE = "YOUR_RADIO.com";
-const STATION_SLUG = "YOUR_RADIO"
+const STATION_SLUG = "YOUR_RADIO";
+
+// max time to wait for your radio meta data response. FWIW, Alexa can only wait for 8s for your skill to return something meaningful, so I've decided to wait no more than 2000ms.
+const MAX_WAIT = 2000
 
 async function getReq(url) {
   return new Promise ((resolve, reject) => {
@@ -46,11 +49,11 @@ const fn = async (url) => new Promise(async (resolve, reject) => {
     }
 });
 
-const timeout = async (url) => {
+const max_wait_req = async (url, wait) => {
   return new Promise(async (resolve, reject) => {
     const cancel = setTimeout(async () => {
       reject();
-    }, 2000);
+    }, wait);
     const answer = await fn(url)
     clearTimeout(cancel)
     resolve(answer)
@@ -59,7 +62,7 @@ const timeout = async (url) => {
 
 const getRequest = async (url) => new Promise(async (resolve, reject) => {
   try {
-    const answer = await timeout(url);
+    const answer = await max_wait_req(url, MAX_WAIT);
     resolve(answer);
   } catch (e) {
     reject();
