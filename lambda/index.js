@@ -536,7 +536,7 @@ async function getPlaybackInfo(who = 0) {
       const answer = await getRequest(url)
       resolve(answer)
     } catch (e) {
-      resolve("Unavailable")
+      reject()
     }
   })
 
