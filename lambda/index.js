@@ -495,7 +495,7 @@ async function fn(url) {
   });
 }
 
-async function max_wait_req(url, wait = 2000) {
+async function maxWaitReq(url, wait) {
   return new Promise(async (resolve, reject) => {
     const cancel = setTimeout(async () => {
       reject();
@@ -509,7 +509,7 @@ async function max_wait_req(url, wait = 2000) {
 async function getRequest(url) {
   return new Promise(async (resolve, reject) => {
     try {
-      const answer = await max_wait_req(url, MAX_WAIT);
+      const answer = await maxWaitReq(url, MAX_WAIT);
       resolve(answer);
     } catch (e) {
       reject();
@@ -517,13 +517,13 @@ async function getRequest(url) {
   })
 }
 
-async function confirmSlot(slot) {
+function confirmSlot(slot) {
   return slot.resolutions.resolutionsPerAuthority.map((resolution) => {
     return resolution.status.code === 'ER_SUCCESS_MATCH' && resolution.values[0].value.id
   }).filter(el => el)[0]
 }
 
-async function unescapeHTML(safe) {
+function unescapeHTML(safe) {
   return safe.replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -553,10 +553,10 @@ async function getPlaybackInfo(who = 0) {
 
   try {
     let show = undefined
-    if (response1.value.station && response1.value.shows.current.name) {
+    if (response1.value && response1.value.station && response1.value.shows.current.name) {
       show = response1.value.shows.current.name
       response[0] = unescapeHTML(show)
-    } else if (response1.value.station) {
+    } else if (response1.value && response1.value.station) {
       response[0] = "Nothing"
     } else {
       response[0] = "a stream that was not identified in time by Alexa."
@@ -568,10 +568,10 @@ async function getPlaybackInfo(who = 0) {
 
   try {
     let show = undefined
-    if (response2.value.station && response2.value.shows.current.name) {
+    if (response2.value && response2.value.station && response2.value.shows.current.name) {
       show = response2.value.shows.current.name
       response[1] = unescapeHTML(show)
-    } else if (response2.value.station) {
+    } else if (response2.value && response2.value.station) {
       response[1] = "Nothing"
     } else {
       response[1] = "a stream that was not identified in time by Alexa."
