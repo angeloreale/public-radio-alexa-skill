@@ -516,7 +516,7 @@ async function getReq(url) {
 }
 
 /**
- * A function promise.
+ * A get request function promise.
  */
 async function fn(url) {
   return new Promise(async (resolve, reject) => {
