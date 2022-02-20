@@ -170,6 +170,12 @@ const PauseAudioIntentHandler = {
 };
 
 
+/**
+ * Well, just switch the channel. 
+ * Thing is, this will only be used after published,
+ * since it makes more sense in a smart intention
+ * (ie. Ask Threads Radio to switch to channel two).
+ */
 const SwitchChannelIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
