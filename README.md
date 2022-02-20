@@ -2,7 +2,7 @@
 
 This is the sample file for an Alexa Skill meant for playing live radio streams.
 
-It was built in Node.js for a lambda function.
+It was built in Javascript for a Node.js lambda function.
 
 I really like [Threads Radio](https://threadsradio.com) and just got an integrated sound system at home using Alexa devices. I was struggling with finding an easy way to listen to Threads live, so, being a programmer myself, decided to take some time to develop this skill for personal use. It might be published eventually, but in meanwhile, if you also have the same need, I hope this file can help you somehow.
 
