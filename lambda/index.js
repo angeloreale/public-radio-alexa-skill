@@ -18,65 +18,6 @@ FWIW, Alexa can only wait for 8s for your skill to return something meaningful,
 so I've decided to wait no more than 2000ms. */
 const MAX_WAIT = 2000
 
-async function getReq(url) {
-  return new Promise ((resolve, reject) => {
-    const req = https.get(url, res => {
-      let rawData = '';
-
-      res.on('data', chunk => {
-        rawData += chunk;
-      });
-
-      res.on('end', async () => {
-        try {
-          resolve(JSON.parse(rawData));
-        } catch (err) {
-          reject();
-        }
-      });
-    });
-
-    req.on('error', err => {
-      reject();
-    });
-  })
-}
-
-const fn = async (url) => new Promise(async (resolve, reject) => {
-    try {
-      const answer = await getReq(url);
-      resolve(answer);
-    } catch (e) {
-      reject();
-    }
-});
-
-const max_wait_req = async (url, wait = 2000) => {
-  return new Promise(async (resolve, reject) => {
-    const cancel = setTimeout(async () => {
-      reject();
-    }, wait);
-    const answer = await fn(url)
-    clearTimeout(cancel)
-    resolve(answer)
-  })
-}
-
-const getRequest = async (url) => new Promise(async (resolve, reject) => {
-  try {
-    const answer = await max_wait_req(url, MAX_WAIT);
-    resolve(answer);
-  } catch (e) {
-    reject();
-  }
-})
-
-const confirmSlot = (slot) => {
-    return slot.resolutions.resolutionsPerAuthority.map((resolution) => {
-        return resolution.status.code === 'ER_SUCCESS_MATCH' && resolution.values[0].value.id
-    }).filter(el => el)[0]
-}
-
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
@@ -519,6 +460,65 @@ const ErrorHandler = {
 
 /* HELPER FUNCTIONS */
 
+async function getReq(url) {
+  return new Promise ((resolve, reject) => {
+    const req = https.get(url, res => {
+      let rawData = '';
+
+      res.on('data', chunk => {
+        rawData += chunk;
+      });
+
+      res.on('end', async () => {
+        try {
+          resolve(JSON.parse(rawData));
+        } catch (err) {
+          reject();
+        }
+      });
+    });
+
+    req.on('error', err => {
+      reject();
+    });
+  })
+}
+
+const fn = async (url) => new Promise(async (resolve, reject) => {
+    try {
+      const answer = await getReq(url);
+      resolve(answer);
+    } catch (e) {
+      reject();
+    }
+});
+
+const max_wait_req = async (url, wait = 2000) => {
+  return new Promise(async (resolve, reject) => {
+    const cancel = setTimeout(async () => {
+      reject();
+    }, wait);
+    const answer = await fn(url)
+    clearTimeout(cancel)
+    resolve(answer)
+  })
+}
+
+const getRequest = async (url) => new Promise(async (resolve, reject) => {
+  try {
+    const answer = await max_wait_req(url, MAX_WAIT);
+    resolve(answer);
+  } catch (e) {
+    reject();
+  }
+})
+
+const confirmSlot = (slot) => {
+    return slot.resolutions.resolutionsPerAuthority.map((resolution) => {
+        return resolution.status.code === 'ER_SUCCESS_MATCH' && resolution.values[0].value.id
+    }).filter(el => el)[0]
+}
+
 const unescapeHTML = (safe) => {
   return safe.replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
@@ -580,6 +580,7 @@ async function getPlaybackInfo(who = 0) {
     
   return response
 }
+
 
 
 /**
