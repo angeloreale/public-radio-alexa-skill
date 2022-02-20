@@ -26,16 +26,13 @@ async function getReq(url) {
       res.on('end', async () => {
         try {
           resolve(JSON.parse(rawData));
-          clearTimeout(timeout);
         } catch (err) {
-          clearTimeout(timeout);
           reject();
         }
       });
     });
 
     req.on('error', err => {
-      clearTimeout(timeout);
       reject();
     });
   })
