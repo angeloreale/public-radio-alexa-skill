@@ -49,7 +49,7 @@ const fn = async (url) => new Promise(async (resolve, reject) => {
     }
 });
 
-const max_wait_req = async (url, wait) => {
+const max_wait_req = async (url, wait = 2000) => {
   return new Promise(async (resolve, reject) => {
     const cancel = setTimeout(async () => {
       reject();
