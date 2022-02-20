@@ -1,0 +1,133 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "YOUR_RADIO",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "PlayAudioIntent",
+          "slots": [
+            {
+              "name": "channel",
+              "type": "channel"
+            }
+          ],
+          "samples": [
+            "tune to {channel}",
+            "play {channel}"
+          ]
+        },
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "samples": []
+        },
+        {
+          "name": "SwitchChannelIntent",
+          "slots": [
+            {
+              "name": "channel",
+              "type": "channel"
+            }
+          ],
+          "samples": [
+            "switch to {channel}"
+          ]
+        },
+        {
+          "name": "WhatsPlayingIntent",
+          "slots": [],
+          "samples": [
+            "what\u0027s live now",
+            "who is the artist",
+            "who is the dj",
+            "what is this song",
+            "what is this",
+            "who is playing",
+            "what\u0027s playing"
+          ]
+        },
+        {
+          "name": "ChannelOneIntent",
+          "slots": [],
+          "samples": [
+            "main channel",
+            "studio channel",
+            "channel one"
+          ]
+        },
+        {
+          "name": "ChannelTwoIntent",
+          "slots": [],
+          "samples": [
+            "international channel",
+            "global channel",
+            "channel two"
+          ]
+        },
+        {
+          "name": "AMAZON.NextIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PreviousIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "id": "0",
+              "name": {
+                "value": "channel one",
+                "synonyms": [
+                  "one",
+                  "studio",
+                  "main channel",
+                  "studio channel"
+                ]
+              }
+            },
+            {
+              "id": "1",
+              "name": {
+                "value": "channel two",
+                "synonyms": [
+                  "two",
+                  "global",
+                  "worldwide channel",
+                  "global channel"
+                ]
+              }
+            }
+          ],
+          "name": "channel"
+        }
+      ]
+    }
+  },
+  "version": "8"
+}
