@@ -484,7 +484,7 @@ async function getReq(url) {
   })
 }
 
-const fn = async (url) => new Promise(async (resolve, reject) => {
+var fn = async (url) => new Promise(async (resolve, reject) => {
     try {
       const answer = await getReq(url);
       resolve(answer);
@@ -493,7 +493,7 @@ const fn = async (url) => new Promise(async (resolve, reject) => {
     }
 });
 
-const max_wait_req = async (url, wait = 2000) => {
+var max_wait_req = async (url, wait = 2000) => {
   return new Promise(async (resolve, reject) => {
     const cancel = setTimeout(async () => {
       reject();
@@ -504,7 +504,7 @@ const max_wait_req = async (url, wait = 2000) => {
   })
 }
 
-const getRequest = async (url) => new Promise(async (resolve, reject) => {
+var getRequest = async (url) => new Promise(async (resolve, reject) => {
   try {
     const answer = await max_wait_req(url, MAX_WAIT);
     resolve(answer);
@@ -513,13 +513,13 @@ const getRequest = async (url) => new Promise(async (resolve, reject) => {
   }
 })
 
-const confirmSlot = (slot) => {
+var confirmSlot = (slot) => {
     return slot.resolutions.resolutionsPerAuthority.map((resolution) => {
         return resolution.status.code === 'ER_SUCCESS_MATCH' && resolution.values[0].value.id
     }).filter(el => el)[0]
 }
 
-const unescapeHTML = (safe) => {
+var unescapeHTML = (safe) => {
   return safe.replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
