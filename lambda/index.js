@@ -21,6 +21,10 @@ const STATION_SLUG = "YOUR_RADIO";
  */
 const MAX_WAIT = 2000
 
+/**
+ * This is literally your ice-breaker.
+ * After your invocation is called, this is the first interaction.
+ */
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
