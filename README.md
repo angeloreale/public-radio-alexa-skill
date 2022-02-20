@@ -8,6 +8,8 @@ I really like [Threads Radio](https://threadsradio.com) and just got an integrat
 
 It was built for a scenario where a radio has 2 live channels in Airtime.pro. Obviously, anything can be adapted here.
 
+Just search for the string `YOUR_RADIO` to find places to replace.
+
 References I used: https://github.com/alexa-samples/skill-sample-nodejs-audio-player
 
 I hope you find this useful.
