@@ -20,7 +20,6 @@ async function getReq(url) {
 
       res.on('data', chunk => {
         rawData += chunk;
-        clearTimeout(timeout);
       });
 
       res.on('end', async () => {
