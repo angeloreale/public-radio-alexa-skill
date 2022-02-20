@@ -86,7 +86,7 @@ const PlayAudioIntentHandler = {
 
 /**
  * I created this for those situations where the person just express
- * a clear intention of listening to channel one (and its synonims)
+ * a clear intention of listening to channel one (and its synonyms)
  */
 const ChannelOnePlayAudioIntentHandler = {
   canHandle(handlerInput) {
