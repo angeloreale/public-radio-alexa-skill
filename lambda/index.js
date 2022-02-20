@@ -84,6 +84,10 @@ const PlayAudioIntentHandler = {
   }
 };
 
+/**
+ * I created this for those situations where the person just express
+ * a clear intention of listening to channel one (and its synonims)
+ */
 const ChannelOnePlayAudioIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -102,8 +106,6 @@ const ChannelOnePlayAudioIntentHandler = {
       return handlerInput.responseBuilder.speak(sorry).reprompt(prompt).getResponse()
     }
 
-
-
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .addAudioPlayerPlayDirective(
@@ -117,6 +119,9 @@ const ChannelOnePlayAudioIntentHandler = {
   }
 };
 
+/**
+ * Same for channel two.
+ */
 const ChannelTwoPlayAudioIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -134,9 +139,6 @@ const ChannelTwoPlayAudioIntentHandler = {
       const prompt = "What channel would you like to listen?"
       return handlerInput.responseBuilder.speak(sorry).reprompt(prompt).getResponse()
     }
-
-
-
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -207,6 +209,10 @@ const SwitchChannelIntentHandler = {
   }
 };
 
+/**
+ * Neat. 
+ * I'd like to know what's playing before tuning in to either A or B.
+ */
 const WhatsPlayingIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -228,6 +234,9 @@ const WhatsPlayingIntentHandler = {
   }
 };
 
+/**
+ * Please contact customer support. :)
+ */
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -243,6 +252,9 @@ const HelpIntentHandler = {
   }
 };
 
+/**
+ * Buh-buh-bye-bye.
+ */
 const CancelAndStopIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -257,6 +269,7 @@ const CancelAndStopIntentHandler = {
       .getResponse();
   }
 };
+
 /* *
  * AudioPlayer events can be triggered when users interact with your audio playback, such as stopping and 
  * starting the audio, as well as when playback is about to finish playing or playback fails.
@@ -410,6 +423,7 @@ const FallbackIntentHandler = {
       .getResponse();
   }
 };
+
 /* *
  * SessionEndedRequest notifies that a session was ended. This handler will be triggered when a currently open 
  * session is closed for one of the following reasons: 1) The user says "exit" or "quit". 2) The user does not 
@@ -425,6 +439,7 @@ const SessionEndedRequestHandler = {
     return handlerInput.responseBuilder.getResponse(); // notice we send an empty response
   }
 };
+
 /* *
  * The intent reflector is used for interaction model testing and debugging.
  * It will simply repeat the intent the user said. You can create custom handlers for your intents 
@@ -467,6 +482,9 @@ const ErrorHandler = {
 
 /* HELPER FUNCTIONS */
 
+/**
+ * Facy pure node get request.
+ */
 async function getReq(url) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, res => {
@@ -491,6 +509,9 @@ async function getReq(url) {
   })
 }
 
+/**
+ * A function promise.
+ */
 async function fn(url) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -502,6 +523,10 @@ async function fn(url) {
   });
 }
 
+/**
+ * An impatient function? This only waits for 
+ * MAX_TIME (see up);
+ */
 async function maxWaitReq(url, wait) {
   return new Promise(async (resolve, reject) => {
     const cancel = setTimeout(async () => {
@@ -513,10 +538,13 @@ async function maxWaitReq(url, wait) {
   })
 }
 
-async function getRequest(url) {
+/**
+ * Kinda facade for an impatient get request.
+ */
+async function getRequestWithin(url, wait) {
   return new Promise(async (resolve, reject) => {
     try {
-      const answer = await maxWaitReq(url, MAX_WAIT);
+      const answer = await maxWaitReq(url, wait);
       resolve(answer);
     } catch (e) {
       reject();
@@ -524,12 +552,22 @@ async function getRequest(url) {
   })
 }
 
+/**
+ * This is an interesting one.
+ * We just need to be sure of a SLOT id. (ie. user said Channel One, 
+ * or maybe said Main Channel,
+ * so weplace the actual slot id, because that's constant,
+ * versus the value which can be any synonym);
+ */
 function confirmSlot(slot) {
   return slot.resolutions.resolutionsPerAuthority.map((resolution) => {
     return resolution.status.code === 'ER_SUCCESS_MATCH' && resolution.values[0].value.id
   }).filter(el => el)[0]
 }
 
+/**
+ * Airtime returns some weird PHP encoding.
+ */
 function unescapeHTML(safe) {
   return safe.replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
@@ -539,12 +577,16 @@ function unescapeHTML(safe) {
     .replace(/\(R\)/g, "from Repeats");
 }
 
+
+/**
+ * Get the juice before the sugar.
+ */
 async function getPlaybackInfo(who = 0) {
   const promises = [];
 
   const createPromise = (url) => new Promise(async (resolve, reject) => {
     try {
-      const answer = await getRequest(url)
+      const answer = await getRequestWithin(url, MAX_WAIT)
       resolve(answer)
     } catch (e) {
       reject()
