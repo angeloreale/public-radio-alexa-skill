@@ -13,7 +13,8 @@ const CHANNELS = ["Channel One", "Channel Two"];
 const WEBSITE = "YOUR_RADIO.com";
 const STATION_SLUG = "YOUR_RADIO";
 
-/* max time to wait for your radio meta data response. FWIW, Alexa can only wait for 8s for your skill to return something meaningful,
+/* max time to wait for your radio meta data response. 
+FWIW, Alexa can only wait for 8s for your skill to return something meaningful,
 so I've decided to wait no more than 2000ms. */
 const MAX_WAIT = 2000
 
