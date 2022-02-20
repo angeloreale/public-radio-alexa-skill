@@ -1,4 +1,4 @@
-# public-radio-alexa
+# public-radio-alexa-skill
 
 This is the sample file for an Alexa Skill meant for playing live radio streams.
 
