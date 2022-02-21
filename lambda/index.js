@@ -494,7 +494,7 @@ const ErrorHandler = {
  async function getRequestWithin(url, wait) {
   return new Promise((resolve, reject) => {
     const cancel = setTimeout(async () => {
-      reject();
+      req.destroy("TIME_OUT");
     }, wait);
     const req = https.get(url, res => {
       let rawData = '';
@@ -516,7 +516,7 @@ const ErrorHandler = {
 
     req.on('error', err => {
       clearTimeout(cancel)
-      reject();
+      reject(err);
     });
   })
 }
