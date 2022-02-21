@@ -505,17 +505,17 @@ const ErrorHandler = {
 
       res.on('end', async () => {
         try {
-          clearTimeout(cancel)
+          clearTimeout(cancel);
           resolve(JSON.parse(rawData));
         } catch (err) {
-          clearTimeout(cancel)
+          clearTimeout(cancel);
           reject();
         }
       });
     });
 
     req.on('error', err => {
-      clearTimeout(cancel)
+      clearTimeout(cancel);
       reject(err);
     });
   })
@@ -547,7 +547,6 @@ function unescapeHTML(safe) {
     .replace(/\(R\)/g, "from Repeats");
 }
 
-
 /**
  * Get the juice before the sugar.
  */
@@ -556,53 +555,54 @@ async function getPlaybackInfo(who = 0) {
 
   const createPromise = (url) => new Promise(async (resolve, reject) => {
     try {
-      const answer = await getRequestWithin(url, MAX_WAIT)
-      resolve(answer)
+      const answer = await getRequestWithin(url, MAX_WAIT);
+      resolve(answer);
     } catch (e) {
-      reject()
+      reject();
     }
   })
 
   promises.push(createPromise(PUBLIC_STATUS[0]));
   promises.push(createPromise(PUBLIC_STATUS[1]));
 
-  const [response1, response2] = await Promise.allSettled(promises)
-
-  const response = {}
+  const response = { '0': 'an unknown stream', '1': 'an unknown stream' }
 
   try {
-    if (response1.value && response1.value.station && response1.value.shows.current.name) {
-      const show = response1.value.shows.current.name
-      response[0] = unescapeHTML(show)
-    } else if (response1.value && response1.value.station) {
-      response[0] = "Nothing"
-    } else {
-      response[0] = "a stream that was not identified in time by Alexa."
+    const [response1, response2] = await Promise.allSettled(promises)
+    try {
+      if (response1.value && response1.value.station && response1.value.shows.current.name) {
+        const show = response1.value.shows.current.name;
+        response[0] = unescapeHTML(show);
+      } else if (response1.value && response1.value.station) {
+        response[0] = "Nothing";
+      } else {
+        response[0] = "a stream that was not identified in time by Alexa.";
+      }
+    } catch (e) {
+      response[0] = "a stream that was not identified in time by Alexa.";
+      console.log(e);
+    } 
+    try {
+      if (response2.value && response2.value.station && response2.value.shows.current.name) {
+        const show = response2.value.shows.current.name;
+        response[1] = unescapeHTML(show);
+      } else if (response2.value && response2.value.station) {
+        response[1] = "Nothing";
+      } else {
+        response[1] = "a stream that was not identified in time by Alexa.";
+      }
+    } catch (e) {
+      response[1] = "a stream that was not identified in time by Alexa.";
+      console.log(e);
     }
   } catch (e) {
-    response[0] = "a stream that was not identified in time by Alexa."
-    console.log(e)
-  }
-
-  try {
-    if (response2.value && response2.value.station && response2.value.shows.current.name) {
-      const show = response2.value.shows.current.name
-      response[1] = unescapeHTML(show)
-    } else if (response2.value && response2.value.station) {
-      response[1] = "Nothing"
-    } else {
-      response[1] = "a stream that was not identified in time by Alexa."
-    }
-  } catch (e) {
-    response[1] = "a stream that was not identified in time by Alexa."
-    console.log(e)
+    response[0] = `a stream that couldn't be figured by Alexa.`;
+    response[1] = `a stream that couldn't be figured by Alexa.`;
   }
 
 
   return response
 }
-
-
 
 /**
  * This handler acts as the entry point for your skill, routing all request and response
