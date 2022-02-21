@@ -523,9 +523,9 @@ const ErrorHandler = {
 
 /**
  * This is an interesting one.
- * We just need to be sure of a SLOT id. (ie. user said Channel One, 
- * or maybe said Main Channel,
- * so weplace the actual slot id, because that's constant,
+ * We just need to be sure of a SLOT id. 
+ * (ie. user said Channel One or maybe said Main Channel,
+ * so we find and place the actual slot id, because that's constant,
  * versus the value which can be any synonym);
  */
 function confirmSlot(slot) {
