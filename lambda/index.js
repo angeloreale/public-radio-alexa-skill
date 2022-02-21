@@ -489,10 +489,13 @@ const ErrorHandler = {
 /* HELPER FUNCTIONS */
 
 /**
- * Facy pure node get request.
+ * Kinda facade for an impatient get request.
  */
-async function getReq(url) {
+ async function getRequestWithin(url, wait) {
   return new Promise((resolve, reject) => {
+    const cancel = setTimeout(async () => {
+      reject();
+    }, wait);
     const req = https.get(url, res => {
       let rawData = '';
 
@@ -502,59 +505,19 @@ async function getReq(url) {
 
       res.on('end', async () => {
         try {
+          clearTimeout(cancel)
           resolve(JSON.parse(rawData));
         } catch (err) {
+          clearTimeout(cancel)
           reject();
         }
       });
     });
 
     req.on('error', err => {
+      clearTimeout(cancel)
       reject();
     });
-  })
-}
-
-/**
- * A get request function promise.
- */
-async function fn(url) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const answer = await getReq(url);
-      resolve(answer);
-    } catch (e) {
-      reject();
-    }
-  });
-}
-
-/**
- * An impatient function? This only waits for 
- * MAX_TIME (see up);
- */
-async function maxWaitReq(url, wait) {
-  return new Promise(async (resolve, reject) => {
-    const cancel = setTimeout(async () => {
-      reject();
-    }, wait);
-    const answer = await fn(url)
-    clearTimeout(cancel)
-    resolve(answer)
-  })
-}
-
-/**
- * Kinda facade for an impatient get request.
- */
-async function getRequestWithin(url, wait) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const answer = await maxWaitReq(url, wait);
-      resolve(answer);
-    } catch (e) {
-      reject();
-    }
   })
 }
 
