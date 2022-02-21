@@ -536,6 +536,7 @@ function confirmSlot(slot) {
 
 /**
  * Airtime returns some weird PHP encoding.
+ * So this helps me treat the show name to appear correctly.
  */
 function unescapeHTML(safe) {
   return safe.replace(/&amp;/g, '&')
